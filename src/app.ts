@@ -3,6 +3,8 @@ import express, { Application, NextFunction, Request, Response } from "express"
 import { Server } from "socket.io"
 import { UserRoutes } from "./routes/user.routes";
 import { connect } from "./infra/database";
+import fs from 'fs'
+import dotenv from 'dotenv'
 
 class App{
     private app: Application;
@@ -25,6 +27,7 @@ class App{
     listen(){
         this.http.listen(3333, async ()=> {
             try {
+                dotenv.config();
                 await connect();
                console.log('Conectado ao banco de dados') 
             } catch (error) {
@@ -53,7 +56,8 @@ class App{
 
     private middlewaresInitalize(){
       this.app.use(express.json());
-      this.app.use(express.urlencoded({extended: true}))  
+      this.app.use(express.urlencoded({extended: true}));
+      fs.accessSync('.env', fs.constants.F_OK)  
     }
 
     private interceptionError(){

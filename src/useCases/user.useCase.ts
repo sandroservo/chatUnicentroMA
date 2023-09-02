@@ -1,4 +1,5 @@
 
+import { sign } from "jsonwebtoken";
 import { IAuth, ICreate } from "../interfaces/users.interface";
 import { UsersRepository } from "../repositories/user.repositories";
 import { compare, hash } from 'bcrypt'
@@ -43,7 +44,29 @@ class Users {
             throw new Error('User or password invalid');
         }
 
-        const secretkey = 'unicentrochat'
+        const secretKey = process.env.TOKEN_SECRET;
+        if(!process.env.TOKEN_SECRET){
+            throw new Error('TOKEN_SECRET not found')
+        }
+        
+        if(!secretKey){
+            throw new Error('There is no secret Key')
+        }
+
+        const token = sign({ name: findUser.name, user_id: findUser.id, email  },
+         secretKey,
+         {
+          expiresIn: '7d',  
+         },
+         );
+
+         return {
+            token,
+            user: {
+                email: findUser.email,
+                name: findUser.name,
+            },
+         };
     }
 }
 
