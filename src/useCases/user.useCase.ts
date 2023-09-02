@@ -3,6 +3,7 @@ import { sign } from "jsonwebtoken";
 import { IAuth, ICreate } from "../interfaces/users.interface";
 import { UsersRepository } from "../repositories/user.repositories";
 import { compare, hash } from 'bcrypt'
+import { HttpException } from "../interfaces/HttpException";
 class Users {
     private usersRepository: UsersRepository;
 
@@ -18,7 +19,7 @@ class Users {
             email,
         });
         if (findUser){
-            throw new Error("User Exists");
+            throw new HttpException(400,"User Exists");
             
         }
         const hashPassword = await hash(password, 10)
@@ -35,22 +36,22 @@ class Users {
             email,
         });
         if (!findUser){
-            throw new Error("User Exists");
+            throw new HttpException(400,"User Exists");
         }
 
         const passwordMatch = await compare(password, findUser.password!);
 
         if(!passwordMatch){
-            throw new Error('User or password invalid');
+            throw new HttpException(400,'User or password invalid');
         }
 
         const secretKey = process.env.TOKEN_SECRET;
         if(!process.env.TOKEN_SECRET){
-            throw new Error('TOKEN_SECRET not found')
+            throw new HttpException(498,'TOKEN_SECRET not found')
         }
-        
+
         if(!secretKey){
-            throw new Error('There is no secret Key')
+            throw new HttpException(498,'There is no secret Key')
         }
 
         const token = sign({ name: findUser.name, user_id: findUser.id, email  },
@@ -67,6 +68,10 @@ class Users {
                 name: findUser.name,
             },
          };
+    }
+
+    findAllusers(){
+        
     }
 }
 

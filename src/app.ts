@@ -5,6 +5,7 @@ import { UserRoutes } from "./routes/user.routes";
 import { connect } from "./infra/database";
 import fs from 'fs'
 import dotenv from 'dotenv'
+import { errorMiddleware } from "./middlewares/error.middleware";
 
 class App{
     private app: Application;
@@ -61,18 +62,21 @@ class App{
     }
 
     private interceptionError(){
-        this.app.use((err: Error, resquest: Request, response: Response, next: NextFunction )=> {
-            // throw new Error
-            if(err instanceof Error){
-                return response.status(400).json({
-                    message: err.message,
-                });
-            }
-            return response.status(500).json({
-                message: 'Internal Server Error.'
-            })
-        })
+        this.app.use(errorMiddleware)
     }
+    // private interceptionError(){
+    //     this.app.use((err: Error, resquest: Request, response: Response, next: NextFunction )=> {
+    //         // throw new Error
+    //         if(err instanceof Error){
+    //             return response.status(400).json({
+    //                 message: err.message,
+    //             });
+    //         }
+    //         return response.status(500).json({
+    //             message: 'Internal Server Error.'
+    //         })
+    //     })
+    // }
 }
 
 export{App}

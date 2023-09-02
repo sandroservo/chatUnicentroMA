@@ -9,8 +9,8 @@ class UserController {
         this.usersUserCase = new Users()
     }
 
-   async store(resquest :Request,  response :Response, next: NextFunction){
-        const { name,  email, password } = resquest.body;
+   async store(request :Request,  response :Response, next: NextFunction){
+        const { name,  email, password } = request.body;
 
         try {
             const result = await this.usersUserCase.create({name,  email, password});
@@ -21,8 +21,8 @@ class UserController {
         }
     }
 
-   async auth(resquest :Request,  response :Response, next: NextFunction){
-        const {email, password}=  resquest.body;
+   async auth(request :Request,  response :Response, next: NextFunction){
+        const {email, password}=  request.body;
         try {
             const result =  await this.usersUserCase.auth({ email, password })
 
@@ -30,6 +30,10 @@ class UserController {
         } catch (error) {
             next(error)
         }
+    }
+
+    get(request :Request,  response :Response, next: NextFunction){
+      console.log(request.params);  
     }
 }
  

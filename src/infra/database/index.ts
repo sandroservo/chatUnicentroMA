@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
+import { HttpException } from '../../interfaces/HttpException';
 
 export async function connect() {
   if (!process.env.MONGO_DB_HOST) {
-    throw new Error('.env not found')
+    throw new HttpException(498,'.env not found')
   }
   try {
     await mongoose.connect(
