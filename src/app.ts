@@ -65,7 +65,7 @@ class App{
     private initializeRoutes(){
         this.app.use('/users', this.useRoutes.router)
         this.app.use('/rooms', this.roomsRoutes.router)
-        this.app.use('/message', this.messageRoutes.router)
+        this.app.use('/messages', this.messageRoutes.router)
     }
 
     private middlewaresInitalize(){
