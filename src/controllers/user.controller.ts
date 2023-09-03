@@ -32,9 +32,25 @@ class UserController {
         }
     }
 
-    get(request :Request,  response :Response, next: NextFunction){
-      console.log(request.params);  
+   async getAllusers(request :Request,  response :Response, next: NextFunction){
+      const {pageSize, pageNumber } = request.query;
+      const DEFAULT_PAGE_SIZE = 2;
+      const DEFAULT_PAGE_NUMBER = 1; 
+
+      const number = pageNumber ? Number(pageNumber) : DEFAULT_PAGE_NUMBER;
+      const size = pageSize ? Number(pageSize) : DEFAULT_PAGE_SIZE;
+
+      try {
+        const result = await this.usersUserCase.findAllusers({
+             pageSize: size,
+              pageNumber: number, 
+            });
+
+        return response.status(200).json(result)
+      } catch (error) {
+       next(error) 
+      }
     }
 }
  
-export {UserController};
+export { UserController };

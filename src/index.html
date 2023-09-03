@@ -66,12 +66,39 @@
     <form id="form" action="">
         <input id="input" autocomplete="off" /><button>Send</button>
     </form>
+
     <script type="module">
-
         import { io } from 'https://cdn.socket.io/4.4.1/socket.io.esm.min.js';
-        const socket = io();
-        console.log('🚀 ~ file: index.html: 67 ~ socket', socket);
 
+        const socket = io();
+        const messageList =  document.getElementById('messages');
+        const messageInput =  document.getElementById('input');
+        const messageForm =  document.getElementById('form');
+
+        messageForm.addEventListener('submit', (event) =>{
+            event.preventDefault()
+            const messageContent =  messageInput.value.trim()
+            if(messageContent){
+                socket.emit('message', {
+                    room_id:'64f3e3cfc44d01c1351bfbeb',
+                    message: messageContent,
+                })
+            }
+            messageInput.value= '';
+            const messageItem =  document.createElement('li')
+            messageItem.textContent = messageContent;
+            messageList.appendChild(messageItem);
+        })
+        //console.log('🚀 ~ file: index.html: 73 ~ socket', socket);
+        socket.on('room_message', (message)=>{
+            //console.log('🚀 ~ file: index.html: 73 ~ socket.on ~ message', socket);
+            const messageItem =  document.createElement('li')
+            messageItem.textContent = message;
+            messageList.appendChild(messageItem);
+        })
+        socket.on('connect', ()=> {
+            socket.emit('join_room','64f3e3cfc44d01c1351bfbeb');
+        })
     </script>
     
 </body>

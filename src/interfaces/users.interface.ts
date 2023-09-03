@@ -1,14 +1,19 @@
-export interface ICreate{
+export interface ICreate {
     name: string
     email: string
     password: string
 }
 
-export interface IEmail{
+export interface IEmail {
     email:  string
 }
 
-export interface IAuth{
+export interface IAuth {
     email: string
     password: string
+}
+
+export interface IPagination {
+    pageNumber:number;
+    pageSize: number;
 }
